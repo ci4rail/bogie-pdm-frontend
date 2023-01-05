@@ -1,0 +1,9 @@
+nats-py==2.1.7
+nkeys
+ipywidgets
+ipyleaflet
+ipydatetime
+plotly
+numpy
+pandas
+colour

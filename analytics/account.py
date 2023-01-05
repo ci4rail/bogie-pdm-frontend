@@ -1,0 +1,6 @@
+# SERVER = "nats://connect.ngs.global:4222"
+SERVER = "tls://connect.ngs.global:4222"
+EXPORT_SUBJECT_METRICS = "agilis-mc-1.EXPORT.metrics"
+EXPORT_SUBJECT_SENSORS = "agilis-mc-1.EXPORT.bogie"
+STREAM_NAME = "export-stream-aggregate"
+NATS_CREDS = "user.creds"
