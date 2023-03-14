@@ -62,7 +62,7 @@ class SensorsUi(widgets.VBox):
         return map
 
     def scale_sensor_data(self, s):
-        return (s - 0.6) * 125
+        return s #(s - 0.6) * 125
         #return s * 3
 
     def render_sensors(self, df):
@@ -76,7 +76,7 @@ class SensorsUi(widgets.VBox):
                 figsize=(FIG_SIZE_X, 6),
             )
             for ax in [ax1, ax2, ax3, ax4]:
-                ax1.set_ylim(-2, 2)
+                ax1.set_ylim(0, 1)
                 ax1.autoscale(enable=False, axis="y")
 
             x = [(4-i) / 1000 for i in range(0, df["sensor_data"].shape[0])]
