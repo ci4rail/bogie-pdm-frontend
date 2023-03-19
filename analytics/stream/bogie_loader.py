@@ -18,13 +18,16 @@ async def nats_stream_fetch(
     df = pd.DataFrame()
     msg_count = 0
     while True:
+        if msg_count % 20 == 0:
+            print(f"loaded {msg_count} rows\r", end='')
         msg = await ns.next_msg(timeout=timeout)
         if msg is None:
             # print("msg is None")
             break
-        await ns.ack(msg)
+        msg_count += 1
         df2 = bogiepandas.bogie_nats_to_pandas(msg)
-
+        await ns.ack(msg)
+ 
         ts = df2["nats_rx_time"].iloc[0].replace(tzinfo=tz.tzlocal())
         if ts > end_time:
             break
@@ -36,9 +39,6 @@ async def nats_stream_fetch(
 
         timeout = 0.5
         
-        if msg_count % 50 == 0:
-            print(f"loaded {msg_count} rows\r", end='')
-        msg_count += 1
     print(f"loaded {msg_count} rows")
     await ns.close()
     return df

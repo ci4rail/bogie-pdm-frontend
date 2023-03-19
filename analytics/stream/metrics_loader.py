@@ -45,33 +45,3 @@ async def nats_stream_fetch(
     return df
 
 
-async def load_from_time(
-    ui, server, nats_creds, stream_name, export_subject, time, time_range
-):
-    print("load_from_time" + str(time))
-    ui.busy()
-    df = await nats_stream_fetch(
-        server, nats_creds, stream_name, export_subject, time, time + time_range
-    )
-    ui.new_data(df)
-
-
-async def loader(queue, ui, server, nats_creds, stream_name, export_subject):
-    time_range = ui.time_range_seconds()
-    start_time = datetime.datetime.now() - datetime.timedelta(hours=1)
-    start_time = start_time.replace(tzinfo=tz.tzlocal())
-
-    while True:
-        print("loader loop loading from %s" % start_time)
-        await load_from_time(
-            ui, server, nats_creds, stream_name, export_subject, start_time, time_range
-        )
-        print("loader loop waiting")
-        command = await queue.get()
-        queue.task_done()
-        if command["type"] == "start_date":
-            start_time = command["value"]
-        elif command["type"] == "time_range":
-            time_range = ui.time_range_seconds()
-        else:
-            print("unknown command")

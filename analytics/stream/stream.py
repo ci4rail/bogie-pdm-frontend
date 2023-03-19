@@ -39,6 +39,7 @@ class NatsStream:
             opt_start_seq=opt_start_seq,
             ack_policy=AckPolicy.EXPLICIT,
             replay_policy=replayPolicy,
+            max_ack_pending=100,
         )
 
         sub = await js.subscribe(subject, stream=stream, config=config)

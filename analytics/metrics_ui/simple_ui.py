@@ -127,12 +127,35 @@ class MetricsUi(widgets.VBox):
 
         return map
 
+    def annotate_operator(self, ax, operator, ts):
+        ax.annotate(operator, xy=(ts, 0), xycoords='data',
+        xytext=(0.01, .99), textcoords='axes fraction',
+        va='top', ha='left',
+        arrowprops=dict(facecolor='black', shrink=0.05))
+        
+
     def render_lte(self, lte_out, df):
         with lte_out:
-            fig, ax = plt.subplots(figsize=FIG_SIZE)
-            line = ax.plot(df["ts"], df["cellular_strength"])
-            ax.set_ylabel("Strength [%]")
-            ax.set_xlabel("Time")
+            fig, (ax_strength, ax_conn) = plt.subplots(2, sharex=True, figsize=(FIG_SIZE_X, 6))
+            l = ax_strength.plot(df["ts"], df["cellular_strength"])
+            ax_strength.set_ylabel("Strength [%]")
+            ax_strength.set_xlabel("Time")
+            ax_strength.set_ylim(0, 100)
+            ax_strength.autoscale(enable=False, axis="y")           
+            sample_idx = 0
+            operator = df.iloc[sample_idx]["cellular_operator"]
+            self.annotate_operator(ax_strength, operator, df.iloc[sample_idx]["ts"])
+            for sample_idx, row in df.iterrows():
+                if df.iloc[sample_idx]["cellular_operator"] != operator:
+                    print(f"new op {operator}")
+                    operator = df.iloc[sample_idx]["cellular_operator"]
+                    self.annotate_operator(ax_strength, operator, df.iloc[sample_idx]["ts"])
+            
+            l = ax_conn.plot(df["ts"], df["internet_connected"])
+            ax_conn.set_ylabel("Connected [1=yes]")
+            ax_conn.set_xlabel("Time")
+            ax_conn.set_ylim(-0.1, 1.1)
+            ax_conn.autoscale(enable=False, axis="y")           
             fig.canvas.header_visible = False
             plt.show(fig)
 
@@ -158,13 +181,20 @@ class MetricsUi(widgets.VBox):
         with out:
             try:
                 fig, (ax1, ax2, ax3) = plt.subplots(3, sharex=True, figsize=(FIG_SIZE_X, 6))
-                l = ax1.plot(df["ts"], df["gnss_speed"])
-                ax1.set_ylabel("Speed [m/s]")
+                l = ax1.plot(df["ts"], df["gnss_speed"]*3.6)
+                ax1.set_ylabel("Speed [km/h]")
+                ax1.set_ylim(0, 180)
+                ax1.autoscale(enable=False, axis="y")           
+
                 l = ax2.plot(df["ts"], df["gnss_eph"])
                 ax2.set_ylabel("Horizontal Error (m)")
+                ax2.set_ylim(0, 20)
+                ax2.autoscale(enable=False, axis="y")           
                 l = ax3.plot(df["ts"], df["gnss_alt"])
                 ax3.set_ylabel("Alt (m)")
                 ax3.set_xlabel("Time")
+                ax3.set_ylim(0, 500)
+                ax3.autoscale(enable=False, axis="y")           
                 fig.canvas.header_visible = False
                 plt.show(fig)
             except KeyError:
@@ -176,6 +206,8 @@ class MetricsUi(widgets.VBox):
             line = ax.plot(df["ts"], df["temperature_inbox"])
             ax.set_ylabel("Temperature [°C]")
             ax.set_xlabel("Time")
+            ax.set_ylim(-40, 100)
+            ax.autoscale(enable=False, axis="y")           
             fig.canvas.header_visible = False
             plt.show(fig)
 

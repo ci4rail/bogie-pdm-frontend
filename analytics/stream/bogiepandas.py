@@ -39,8 +39,11 @@ def bogie_nats_to_pandas(m):
     except ValueError:
         has_invalid = False
     if not has_invalid:
-        df["invalid"] = [False]
-    if not df["invalid"].iloc[0]:
+        df["pos_valid"] = [True]
+    else:
+        df["pos_valid"] = [False]
+        
+    if df["pos_valid"].iloc[0]:
         df["lat"] = [data.position.lat]
         df["lon"] = [data.position.lon]
         df["alt"] = [data.position.alt]
