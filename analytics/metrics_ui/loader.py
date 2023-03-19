@@ -15,12 +15,17 @@ async def nats_stream_fetch(
     end_time = end_time.replace(tzinfo=tz.tzlocal())
     # print("nats_stream_fetch until %s\n" % end_time)
     timeout = 2.0
+    msg_count = 0
     df = pd.DataFrame()
     while True:
+        if msg_count % 20 == 0:
+            print(f"loaded {msg_count} rows\r", end='')
+
         msg = await ns.next_msg(timeout=timeout)
         if msg is None:
             # print("msg is None")
             break
+        msg_count += 1
         await ns.ack(msg)
         df2 = metricpandas.metrics_nats_to_pandas(msg)
 
@@ -34,6 +39,9 @@ async def nats_stream_fetch(
             df = pd.concat([df, df2], axis=0)
 
         timeout = 0.5
+        
+
+    print(f"loaded {msg_count} rows")
     return df
 
 

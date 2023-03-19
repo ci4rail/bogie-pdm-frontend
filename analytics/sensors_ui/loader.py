@@ -16,6 +16,7 @@ async def nats_stream_fetch(
     # print("nats_stream_fetch until %s\n" % end_time)
     timeout = 2.0
     df = pd.DataFrame()
+    msg_count = 0
     while True:
         msg = await ns.next_msg(timeout=timeout)
         if msg is None:
@@ -34,5 +35,10 @@ async def nats_stream_fetch(
             df = pd.concat([df, df2], axis=0)
 
         timeout = 0.5
+        
+        if msg_count % 50 == 0:
+            print(f"loaded {msg_count} rows\r", end='')
+        msg_count += 1
+    print(f"loaded {msg_count} rows")
     await ns.close()
     return df

@@ -113,7 +113,7 @@ class MetricsUi(widgets.VBox):
             self.map_overlay = l
 
     def render_map(self, df):
-        center = (49.44, 11.06)
+        center = (49.00, 12.10)
         map = ipyleaflet.Map(center=center, zoom=12)
 
         try:

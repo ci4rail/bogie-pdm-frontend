@@ -21,10 +21,16 @@ SUAG3O2H6K....6K3SKLM7VPLPL73DJI
 *************************************************************
 ```
 
+* Install Python (tested with 3.10), downloaded via MS AppStore
+
+* `python -m pip install --upgrade pip`
+
+* Install Microsoft Visual C++ Build Tools (https://visualstudio.microsoft.com/visual-cpp-build-tools/), and open command prompt by "Start" the tools.
+
 * Install Python dependencies:
 
 ```bash
-pip3 install -r requirements.txt
+pip3 install -r analytics/requirements.txt
 ```
 
 ## Run:

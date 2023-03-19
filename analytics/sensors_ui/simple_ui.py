@@ -41,7 +41,7 @@ class SensorsUi(widgets.VBox):
         print(kwargs)
 
     def render_map(self, df):
-        center = (49.44, 11.06)
+        center = (49.00, 12.10)
         map = ipyleaflet.Map(center=center, zoom=10)
 
         locations = df[["lat", "lon"]].dropna().values.tolist()
@@ -61,8 +61,8 @@ class SensorsUi(widgets.VBox):
             i += 1
         return map
 
-    def scale_sensor_data(self, s):
-        return s #(s - 0.6) * 125
+    def scale_sensor_data(self, s, fullscale):
+        return (s - 0.6) * (fullscale/0.4)
         #return s * 3
 
     def render_sensors(self, df):
@@ -76,35 +76,35 @@ class SensorsUi(widgets.VBox):
                 figsize=(FIG_SIZE_X, 6),
             )
             for ax in [ax1, ax2, ax3, ax4]:
-                ax1.set_ylim(0, 1)
+                ax1.set_ylim(-8, 8)
                 ax1.autoscale(enable=False, axis="y")
 
             x = [(4-i) / 1000 for i in range(0, df["sensor_data"].shape[0])]
             ax1.plot(
                 x,
-                self.scale_sensor_data(df["sensor_data"]["sensor0"]),
-                label="0",
+                self.scale_sensor_data(df["sensor_data"]["sensor0"],50.0),
+                label="Achse 1 rechts",
                 color="blue",
             )
             ax1.legend(loc="upper right")
             ax2.plot(
                 x,
-                self.scale_sensor_data(df["sensor_data"]["sensor1"]),
-                label="1",
+                self.scale_sensor_data(df["sensor_data"]["sensor1"],50.0),
+                label="Achse 1 links",
                 color="orange",
             )
             ax2.legend(loc="upper right")
             ax3.plot(
                 x,
-                self.scale_sensor_data(df["sensor_data"]["sensor2"]),
-                label="2",
+                self.scale_sensor_data(df["sensor_data"]["sensor2"],100.0),
+                label="Achse 2 rechts",
                 color="red",
             )
             ax3.legend(loc="upper right")
             ax4.plot(
                 x,
-                self.scale_sensor_data(df["sensor_data"]["sensor3"]),
-                label="3",
+                self.scale_sensor_data(df["sensor_data"]["sensor3"],100.0),
+                label="Achse 2 links",
                 color="green",
             )
             ax4.legend(loc="upper right")
@@ -112,8 +112,9 @@ class SensorsUi(widgets.VBox):
             ax4.set_xlabel("Time (s)")
             fig.canvas.header_visible = False
             timestr = df["trigger_time"].strftime("%Y-%m-%d %H:%M:%S")
+            speed_kmh = df['speed']*3.6
             fig.suptitle(
-                f"Sample {self.idx+1} of {self.num_samples}, recorded {timestr}",
+                f"Sample {self.idx+1} of {self.num_samples}, recorded {timestr}, speed {speed_kmh:.0f} km/h",
                 fontsize=16,
             )
             plt.show(fig)
