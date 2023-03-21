@@ -1,5 +1,9 @@
 # bogie-pdm-frontend
 
+This repository contains the frontend for the bogie PDM system in form of a Jupyter notebook.
+
+The described setup is for Windows 11.
+
 ## Prepare:
 
 * Check if the settings in `analysis/account.py` are correct.
@@ -25,12 +29,20 @@ SUAG3O2H6K....6K3SKLM7VPLPL73DJI
 
 * `python -m pip install --upgrade pip`
 
-* Install Microsoft Visual C++ Build Tools (https://visualstudio.microsoft.com/visual-cpp-build-tools/), and open command prompt by "Start" the tools.
+* Install Microsoft Visual C++ Build Tools (https://visualstudio.microsoft.com/visual-cpp-build-tools/)
+  * In the installation dialog, select "Desktop development with C++"
+
 
 * Install Python dependencies:
 
-```bash
-pip3 install -r analytics/requirements.txt
+```cmd
+pip3 install -r analytics\requirements.txt
+```
+
+Ensure jupyter-lab is in the PATH. If not, add it manually, for example:
+
+```cmd
+set PATH=%PATH%;C:\Users\<usernam>\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts
 ```
 
 ## Run:

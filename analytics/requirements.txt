@@ -7,3 +7,6 @@ ipydatetime
 numpy
 pandas
 colour
+matplotlib
+ipympl
+protobuf==3.20.0
