@@ -6,6 +6,7 @@ The described setup is for Windows 11.
 
 ## Prepare:
 
+* Clone this repository or download the zip file and extract it.
 * Check if the settings in `analysis/account.py` are correct.
 * Create `analysis/user.creds` file with NATS user JWT and NKEY seed. Example:
 
@@ -26,11 +27,9 @@ SUAG3O2H6K....6K3SKLM7VPLPL73DJI
 ```
 
 * Install Python (tested with 3.10), downloaded via MS AppStore
+* Update pip: `python -m pip install --upgrade pip`
 
-* `python -m pip install --upgrade pip`
-
-* Install Microsoft Visual C++ Build Tools (https://visualstudio.microsoft.com/visual-cpp-build-tools/)
-  * In the installation dialog, select "Desktop development with C++"
+* Install Microsoft Visual C++ Build Tools (https://visualstudio.microsoft.com/visual-cpp-build-tools/): In the installation dialog, select "Desktop development with C++"
 
 
 * Install Python dependencies:
@@ -49,6 +48,13 @@ set PATH=%PATH%;C:\Users\<usernam>\AppData\Local\Packages\PythonSoftwareFoundati
 ```
 jupyter-lab
 ```
+
+Open `metricssimple.ipynb` in juptyer-lab. Run first two cells to load and display the metrics data.
+
+Open `sensors_simple.ipynb` in juptyer-lab. Run first two cells to load and display the sensor data.
+
+
+
 
 # Data format from stream
 
